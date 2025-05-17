@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
@@ -16,6 +17,9 @@ class MyGame extends FlameGame {
 
   /// Asteroids Spawn
   late SpawnComponent _asteroidsSpawnComponent;
+
+  /// For Random Spawning of the Asteroids
+  final Random _random = Random();
 
   /// Here we are configuring things while loading game
   @override
@@ -103,13 +107,22 @@ class MyGame extends FlameGame {
     ///  factory: (index)=>Asteriod(position: Vector2.zero()), means the widget we want to spawn
     ///  minPeriod: 0.7,means minimum time
     ///  maxPeriod: 1.6 means maximum time
+    ///  selfPositioning means you will allow to use random position
     _asteroidsSpawnComponent = SpawnComponent.periodRange(
-      factory: (index) => Asteriod(position: Vector2.zero()),
+      /// Here we calling the _generateRandomSpawnPosition to get every time a random position for our asteroid
+      factory: (index) => Asteriod(position:_generateRandomSpawnPosition()),
       minPeriod: 0.7,
       maxPeriod: 1.6,
+      selfPositioning: true
     );
 
     /// Here we are adding our _asteroidsSpawnComponent into our game
     add(_asteroidsSpawnComponent);
+  }
+/// _generateRandomSpawnPosition will generate the random position for our asteroid and return Vector2
+  Vector2 _generateRandomSpawnPosition(){
+    ///Vector2(10+_random.nextDouble()*(size.x-10*2), -100);
+    ///Vector2(10Px+RandomFrom(0,1)*ScreenWidth-10px*2,-100FromTop );
+    return Vector2(10+_random.nextDouble()*(size.x-10*2), -100);
   }
 }
