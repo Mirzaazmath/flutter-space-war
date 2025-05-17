@@ -21,6 +21,8 @@ class Player extends SpriteComponent with HasGameReference<MyGame> {
     return super.onLoad();
   }
 
+  /// update will call in everyFrame of our game
+
   /// Here we are updating the position of our player
   @override
   void update(double dt) {
@@ -42,6 +44,8 @@ class Player extends SpriteComponent with HasGameReference<MyGame> {
     final double screenHeight = game.size.y;
 
     /// Here we are preventing the player from going off the top and bottom edges(vertically)
+    /// clampDouble(position.y, size.y / 2, screenHeight - size.y / 2);
+    /// clampDouble    currentPosition , halfOfPlayerSize , fullScreenHeight - halfOfPlayerSize
     position.y = clampDouble(position.y, size.y / 2, screenHeight - size.y / 2);
 
     /// Here we are wraparound the player from going left to right and right to left if both the player exceed the screen width
