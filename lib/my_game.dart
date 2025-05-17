@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 
@@ -16,19 +17,26 @@ class MyGame extends FlameGame {
 
     /// Here we are setting our device in  portraitMode
     await Flame.device.setPortrait();
-   /// Here we are calling the  startGame method
+
+    /// Here we are calling the  startGame method
     startGame();
 
     return super.onLoad();
   }
-/// Here we are starting the game
+
+  /// Here we are starting the game
   void startGame() {
     /// Here we are calling the _createPLayer to create a player
     _createPLayer();
   }
-/// Here we are creating the player and adding that player into our game
+
+  /// Here we are creating the player and adding that player into our game
   void _createPLayer() {
-    player = Player();
+    /// anchor=Anchor.center means alignment of our player
+    /// position=Vector2(size.x/2, size.y/2) means position of our player at screen
+    /// size.x means horizontal (Width)
+    /// size.y means vertical (Height)
+    player = Player()..anchor=Anchor.center..position=Vector2(size.x/2, size.y/2);
     add(player);
   }
 }
