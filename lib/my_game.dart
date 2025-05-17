@@ -67,8 +67,12 @@ class MyGame extends FlameGame {
         sprite: await loadSprite('joystick_background.png'),
         size: Vector2.all(100)
       ),
+      /// priority acts like stack
+      /// we need to set priority to avoid any moving issue
+      priority:10,
       /// Here we are positioning the joystick at our game screen
     )..anchor=Anchor.bottomLeft..position=Vector2(20,size.y-20);
+
     /// Here we are adding our joystick into our game
     add(joystick);
 
