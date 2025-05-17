@@ -15,7 +15,7 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
   /// size: Vector2.all(120), means size of our Asteriod
   /// anchor: Anchor.center Alignment of our  Asteriod
   Asteriod({required super.position})
-    : super(size: Vector2.all(120), anchor: Anchor.center);
+    : super(size: Vector2.all(120), anchor: Anchor.center,priority: -1);
 
   @override
   FutureOr<void> onLoad() async {
