@@ -10,6 +10,9 @@ class Player extends SpriteComponent with HasGameReference{
     /// loadSprite method and passing the assets name
     /// it will automatically search it from assets/ images folder
     sprite = await game.loadSprite("player_blue_on0.png");
+    /// Here we are adjusting the size of our player
+    /// we have reduced the size to 1/3 of its original size
+    size*=0.3;
 
     return super.onLoad();
   }
