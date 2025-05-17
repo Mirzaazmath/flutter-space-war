@@ -14,6 +14,9 @@ class MyGame extends FlameGame {
   /// joystick
   late JoystickComponent joystick;
 
+  /// Asteroids Spawn
+  late SpawnComponent _asteroidsSpawnComponent;
+
   /// Here we are configuring things while loading game
   @override
   FutureOr<void> onLoad() async {
@@ -38,8 +41,8 @@ class MyGame extends FlameGame {
     /// Here we are calling the _createPLayer to create a player
     _createPLayer();
 
-    /// Here we are added Asteroid in our game
-    add(Asteriod(position: Vector2(200, 0)));
+    /// Here we are Calling the _asteroidSpawn
+    _asteroidSpawn();
   }
 
   /// Here we are creating the player and adding that player into our game
@@ -91,5 +94,22 @@ class MyGame extends FlameGame {
 
     /// Here we are adding our joystick into our game
     add(joystick);
+  }
+
+  /// _asteroidSpawn will generate asteroid Spawn
+  void _asteroidSpawn() {
+    /// Here we are assigning the _asteroidsSpawnComponent
+    /// SpawnComponent.periodRange
+    ///  factory: (index)=>Asteriod(position: Vector2.zero()), means the widget we want to spawn
+    ///  minPeriod: 0.7,means minimum time
+    ///  maxPeriod: 1.6 means maximum time
+    _asteroidsSpawnComponent = SpawnComponent.periodRange(
+      factory: (index) => Asteriod(position: Vector2.zero()),
+      minPeriod: 0.7,
+      maxPeriod: 1.6,
+    );
+
+    /// Here we are adding our _asteroidsSpawnComponent into our game
+    add(_asteroidsSpawnComponent);
   }
 }
