@@ -46,21 +46,36 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
     /// "verticalCurrentPosition +=newVerticalPosition*speed"
     position += _velocity * dt;
 
-    /// Here are checking the vertical position of our asteroid if it exceed the height of the screen
-    if (position.y > game.size.y + size.y / 2) {
-      /// then we are removing that asteroid from memory of our device
-      removeFromParent();
-    }
+    /// Here we are calling the _handleScreenBounds to handle the Bounds of our screen for asteroids
+    _handleScreenBounds();
 
     super.update(dt);
   }
 
   /// Here We are return random Velocity( for asteroids
   Vector2 _generateVelocity() {
-    final double forceFactor =_maxSize/size.x;
+    final double forceFactor = _maxSize / size.x;
     return Vector2(
-      _random.nextDouble() * 120 - 60,
-      100 + _random.nextDouble() * 50,
-    )*forceFactor;
+          _random.nextDouble() * 120 - 60,
+          100 + _random.nextDouble() * 50,
+        ) *
+        forceFactor;
+  }
+
+  void _handleScreenBounds() {
+    /// Here are checking the vertical position of our asteroid if it exceed the height of the screen
+    if (position.y > game.size.y + size.y / 2) {
+      /// then we are removing that asteroid from memory of our device
+      removeFromParent();
+    }
+
+    final double screenWidth = game.size.x;
+    /// Here we are checking the asteroid exceed the width of the screen from either
+    /// we are switching position so that it can be visible exactly like player
+    if(position.x<-size.x/2){
+      position.x=screenWidth+size.x/2;
+    }else if(position.x>screenWidth+size.x/2){
+      position.x=-size.x/2;
+    }
   }
 }
