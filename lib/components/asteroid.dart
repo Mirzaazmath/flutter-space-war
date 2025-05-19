@@ -10,12 +10,20 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
   /// for our random asteroids
   final Random _random = Random();
 
+  /// Maximum size for an asteroid
+  static const double _maxSize = 120;
+
+  /// Velocity for our Falling asteroids
+  late Vector2 _velocity;
+
   /// Here we have created a constructor with one required that is position
   /// and  with some default value like size and anchor
   /// size: Vector2.all(120), means size of our Asteriod
   /// anchor: Anchor.center Alignment of our  Asteriod
-  Asteriod({required super.position})
-    : super(size: Vector2.all(120), anchor: Anchor.center,priority: -1);
+  Asteriod({required super.position, double size = _maxSize})
+    : super(size: Vector2.all(size), anchor: Anchor.center, priority: -1) {
+    _velocity = _generateVelocity();
+  }
 
   @override
   FutureOr<void> onLoad() async {
@@ -36,7 +44,7 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
     /// Here position of our asteroids will update
     ///  position.y +=150*dt;
     /// "verticalCurrentPosition +=newVerticalPosition*speed"
-    position.y += 150 * dt;
+    position += _velocity * dt;
 
     /// Here are checking the vertical position of our asteroid if it exceed the height of the screen
     if (position.y > game.size.y + size.y / 2) {
@@ -45,5 +53,14 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
     }
 
     super.update(dt);
+  }
+
+  /// Here We are return random Velocity( for asteroids
+  Vector2 _generateVelocity() {
+    final double forceFactor =_maxSize/size.x;
+    return Vector2(
+      _random.nextDouble() * 120 - 60,
+      100 + _random.nextDouble() * 50,
+    )*forceFactor;
   }
 }
