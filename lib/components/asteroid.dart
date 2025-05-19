@@ -15,6 +15,8 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
 
   /// Velocity for our Falling asteroids
   late Vector2 _velocity;
+  /// for handling the speed of the spin of asteroid
+  late double _spinSpeed;
 
   /// Here we have created a constructor with one required that is position
   /// and  with some default value like size and anchor
@@ -23,6 +25,7 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
   Asteriod({required super.position, double size = _maxSize})
     : super(size: Vector2.all(size), anchor: Anchor.center, priority: -1) {
     _velocity = _generateVelocity();
+    _spinSpeed=_random.nextDouble()*1.5-0.75;
   }
 
   @override
@@ -48,6 +51,8 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
 
     /// Here we are calling the _handleScreenBounds to handle the Bounds of our screen for asteroids
     _handleScreenBounds();
+    /// Here we are handling the spin speed the asteroid
+    angle+=_spinSpeed*dt;
 
     super.update(dt);
   }
