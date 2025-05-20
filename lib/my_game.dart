@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:space_war/components/asteroid.dart';
+import 'package:space_war/components/shoot_btn.dart';
 
 import 'components/player.dart';
 
@@ -20,6 +21,9 @@ class MyGame extends FlameGame {
 
   /// For Random Spawning of the Asteroids
   final Random _random = Random();
+
+  /// ShootButton
+  late ShootButton _shootButton;
 
   /// Here we are configuring things while loading game
   @override
@@ -43,14 +47,17 @@ class MyGame extends FlameGame {
     await _createJoyStick();
 
     /// Here we are calling the _createPLayer to create a player
-    _createPLayer();
+    await _createPLayer();
+
+    /// Here we are calling the _createShootButton to create a shooter
+    _createShootButton();
 
     /// Here we are Calling the _asteroidSpawn
     _asteroidSpawn();
   }
 
   /// Here we are creating the player and adding that player into our game
-  void _createPLayer() {
+  Future<void> _createPLayer() async {
     /// anchor=Anchor.center means alignment of our player
     /// position=Vector2(size.x/2, size.y/2) means position of our player at screen center
     /// size.x means horizontal (Width)
@@ -110,19 +117,33 @@ class MyGame extends FlameGame {
     ///  selfPositioning means you will allow to use random position
     _asteroidsSpawnComponent = SpawnComponent.periodRange(
       /// Here we calling the _generateRandomSpawnPosition to get every time a random position for our asteroid
-      factory: (index) => Asteriod(position:_generateRandomSpawnPosition()),
+      factory: (index) => Asteriod(position: _generateRandomSpawnPosition()),
       minPeriod: 0.7,
       maxPeriod: 1.6,
-      selfPositioning: true
+      selfPositioning: true,
     );
 
     /// Here we are adding our _asteroidsSpawnComponent into our game
     add(_asteroidsSpawnComponent);
   }
-/// _generateRandomSpawnPosition will generate the random position for our asteroid and return Vector2
-  Vector2 _generateRandomSpawnPosition(){
+
+  /// _generateRandomSpawnPosition will generate the random position for our asteroid and return Vector2
+  Vector2 _generateRandomSpawnPosition() {
     ///Vector2(10+_random.nextDouble()*(size.x-10*2), -100);
     ///Vector2(10Px+RandomFrom(0,1)*ScreenWidth-10px*2,-100FromTop );
-    return Vector2(10+_random.nextDouble()*(size.x-10*2), -100);
+    return Vector2(10 + _random.nextDouble() * (size.x - 10 * 2), -100);
+  }
+
+  /// _createShootButton will create a shooter in our game so user can shoot the laser at asteroids
+  /// ..anchor = Anchor.bottomRight means Alignment
+  /// ..position = Vector2(size.x - 20, size.y - 20) means position of our shooter at screen
+  /// ..priority = 10 means the stack position of our shooter
+  void _createShootButton() {
+    _shootButton =
+        ShootButton()
+          ..anchor = Anchor.bottomRight
+          ..position = Vector2(size.x - 20, size.y - 20)
+          ..priority = 10;
+    add(_shootButton);
   }
 }
