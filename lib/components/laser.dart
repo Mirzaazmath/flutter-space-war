@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:space_war/my_game.dart';
 
 /// Here we have create a  SpriteComponent class for laser that help us to shoot the asteroids
-class Laser extends SpriteComponent with HasGameReference {
+class Laser extends SpriteComponent with HasGameReference<MyGame> {
   ///anchor: Anchor.center, means align of the laser
   ///priority: -1  means stack position
   Laser({required super.position}) : super(anchor: Anchor.center, priority: -1);
