@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:space_war/components/laser.dart';
 import 'package:space_war/my_game.dart';
 
 /// Here we are creating  a player component with HasGameReference
 /// HasGameReference provide us the GameReference so we can access the game elements
 class Player extends SpriteComponent with HasGameReference<MyGame> {
+  /// Created a variable to handle the shooting of the laser
+  bool _isShooting = false;
   @override
   FutureOr<void> onLoad() async {
     /// here we are setting the player in sprite with the help of
@@ -32,7 +35,13 @@ class Player extends SpriteComponent with HasGameReference<MyGame> {
     /// position +=game.joystick.relativeDelta.normalized()*200*dt;
     /// "currentPosition +=newPositionFromJoyStick*speed"
     position += game.joystick.relativeDelta.normalized() * 200 * dt;
+    /// Here we are handling the screen bound
     _handleScreenBounds();
+    ///Here we are checking if the weather the _isShooting is started or not
+     if(_isShooting){
+       _fireLaser();
+     }
+
   }
 
   /// Here we are handling the bounds of our game screen
@@ -59,5 +68,20 @@ class Player extends SpriteComponent with HasGameReference<MyGame> {
       /// then we are positioning the player to the edge of left side
       position.x = 0;
     }
+  }
+
+  /// Here we have created a startShooting  to start shooting  the laser
+  void startShooting() {
+    _isShooting = true;
+  }
+
+  /// Here we have created a stopShooting  to stop  shooting the laser
+  void stopShooting() {
+    _isShooting = false;
+  }
+/// Here we are added the Laser to our _fireLaser method
+  void _fireLaser(){
+    /// Here added Laser to our game with player position clone + playerHalfHeight
+  game.add(Laser(position: position.clone()+Vector2(0,-size.y/2)));
   }
 }
