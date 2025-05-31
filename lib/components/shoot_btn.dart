@@ -33,7 +33,7 @@ class ShootButton extends SpriteComponent with HasGameReference<MyGame>,TapCallb
   /// Here we are handling the onTapCancel Event
   @override
   void onTapCancel(TapCancelEvent event) {
-    /// Whenever user remove the tap on the shoot button we are calling
+    /// Whenever user move away from  the shoot button we are calling
     /// stopShooting to stop the lasers
       game.player.stopShooting();
     super.onTapCancel(event);

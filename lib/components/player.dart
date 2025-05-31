@@ -10,6 +10,10 @@ import 'package:space_war/my_game.dart';
 class Player extends SpriteComponent with HasGameReference<MyGame> {
   /// Created a variable to handle the shooting of the laser
   bool _isShooting = false;
+  /// Created a variable to handle time duration between lasers
+  final double _fireCoolDown=0.2;
+  /// Created a variable to check the  _fireCoolDown duration from last shoot
+  double _elaspedFireTime = 0.0;
   @override
   FutureOr<void> onLoad() async {
     /// here we are setting the player in sprite with the help of
@@ -37,9 +41,14 @@ class Player extends SpriteComponent with HasGameReference<MyGame> {
     position += game.joystick.relativeDelta.normalized() * 200 * dt;
     /// Here we are handling the screen bound
     _handleScreenBounds();
-    ///Here we are checking if the weather the _isShooting is started or not
-     if(_isShooting){
+
+    /// Here we are adding _elaspedFireTime to coolDown laser shoot speed
+    _elaspedFireTime +=dt;
+    ///Here we are checking if the weather the _isShooting is started or not with _elaspedFireTime to maintain a proper duration between each laser when play long pressed the shoot button
+     if(_isShooting && _elaspedFireTime>=_fireCoolDown){
        _fireLaser();
+       /// Here we are resetting the  _elaspedFireTime back to zero to maintain proper shoot duration
+       _elaspedFireTime = 0.0;
      }
 
   }
