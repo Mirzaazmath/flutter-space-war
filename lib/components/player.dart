@@ -2,18 +2,27 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+
+import 'package:flutter/services.dart';
 import 'package:space_war/components/laser.dart';
 import 'package:space_war/my_game.dart';
 
 /// Here we are creating  a player component with HasGameReference
 /// HasGameReference provide us the GameReference so we can access the game elements
-class Player extends SpriteComponent with HasGameReference<MyGame> {
+/// Here we are also added KeyboardHandler to control our game with physical
+class Player extends SpriteComponent
+    with HasGameReference<MyGame>, KeyboardHandler {
   /// Created a variable to handle the shooting of the laser
   bool _isShooting = false;
+
   /// Created a variable to handle time duration between lasers
-  final double _fireCoolDown=0.2;
+  final double _fireCoolDown = 0.2;
+
   /// Created a variable to check the  _fireCoolDown duration from last shoot
   double _elaspedFireTime = 0.0;
+
+  /// Created a variable to handle keyBoardMovement in our game
+  final Vector2 _keyBoardMovement = Vector2.zero();
   @override
   FutureOr<void> onLoad() async {
     /// here we are setting the player in sprite with the help of
@@ -38,19 +47,23 @@ class Player extends SpriteComponent with HasGameReference<MyGame> {
     /// Here position of our player will update
     /// position +=game.joystick.relativeDelta.normalized()*200*dt;
     /// "currentPosition +=newPositionFromJoyStick*speed"
-    position += game.joystick.relativeDelta.normalized() * 200 * dt;
+    /// Here we have added the key arrow movement from keyboard in our game
+    final Vector2 movement = game.joystick.relativeDelta+_keyBoardMovement;
+    position += movement.normalized() * 200 * dt;
+
     /// Here we are handling the screen bound
     _handleScreenBounds();
 
     /// Here we are adding _elaspedFireTime to coolDown laser shoot speed
-    _elaspedFireTime +=dt;
-    ///Here we are checking if the weather the _isShooting is started or not with _elaspedFireTime to maintain a proper duration between each laser when play long pressed the shoot button
-     if(_isShooting && _elaspedFireTime>=_fireCoolDown){
-       _fireLaser();
-       /// Here we are resetting the  _elaspedFireTime back to zero to maintain proper shoot duration
-       _elaspedFireTime = 0.0;
-     }
+    _elaspedFireTime += dt;
 
+    ///Here we are checking if the weather the _isShooting is started or not with _elaspedFireTime to maintain a proper duration between each laser when play long pressed the shoot button
+    if (_isShooting && _elaspedFireTime >= _fireCoolDown) {
+      _fireLaser();
+
+      /// Here we are resetting the  _elaspedFireTime back to zero to maintain proper shoot duration
+      _elaspedFireTime = 0.0;
+    }
   }
 
   /// Here we are handling the bounds of our game screen
@@ -88,9 +101,30 @@ class Player extends SpriteComponent with HasGameReference<MyGame> {
   void stopShooting() {
     _isShooting = false;
   }
-/// Here we are added the Laser to our _fireLaser method
-  void _fireLaser(){
+
+  /// Here we are added the Laser to our _fireLaser method
+  void _fireLaser() {
     /// Here added Laser to our game with player position clone + playerHalfHeight
-  game.add(Laser(position: position.clone()+Vector2(0,-size.y/2)));
+    game.add(Laser(position: position.clone() + Vector2(0, -size.y / 2)));
+  }
+
+  /// Here we are handling the physical keyboard KeyEvent
+  /// Here we have defined which key will do what in our app
+  @override
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    /// Here we are are changing horizontal movement of our player by arrowLeft and arrowRight key of physical keyboard
+    _keyBoardMovement.x = 0;
+    _keyBoardMovement.x +=
+        keysPressed.contains(LogicalKeyboardKey.arrowLeft) ? -1 : 0;
+    _keyBoardMovement.x +=
+        keysPressed.contains(LogicalKeyboardKey.arrowRight) ? 1 : 0;
+    /// Here we are are changing vertical  movement of our player by arrowUp and arrowUp key of physical keyboard
+    _keyBoardMovement.y = 0;
+    _keyBoardMovement.y +=
+        keysPressed.contains(LogicalKeyboardKey.arrowUp) ? -1 : 0;
+    _keyBoardMovement.y +=
+        keysPressed.contains(LogicalKeyboardKey.arrowDown) ? 1 : 0;
+
+    return true;
   }
 }

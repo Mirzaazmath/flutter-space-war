@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:space_war/components/asteroid.dart';
@@ -9,7 +10,8 @@ import 'package:space_war/components/shoot_btn.dart';
 
 import 'components/player.dart';
 
-class MyGame extends FlameGame {
+/// HasKeyboardHandlerComponents will help us with movement of player via keyboard arrows
+class MyGame extends FlameGame  with HasKeyboardHandlerComponents{
   /// player
   late Player player;
 
