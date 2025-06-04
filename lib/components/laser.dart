@@ -41,7 +41,9 @@ class Laser extends SpriteComponent with HasGameReference<MyGame>,CollisionCallb
       /// We are removing the laser from our game
       removeFromParent();
       /// and also we are removing the Asteriod from our game
-      other.removeFromParent();
+      /// by calling the takeDamage method from asteroid class
+      /// this method will take of everything
+      other.takeDamage();
     }
   }
 }

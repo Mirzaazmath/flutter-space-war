@@ -92,5 +92,15 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
       position.x=-size.x/2;
     }
   }
+  /// Here we have created the takeDamage method to reduse our asteroid health and when it reach to 0 then we will remove that asteroid from our game
+  void takeDamage(){
+    /// Here we are decreasing the _health by 1 whenever laser hits the asteroid
+    _health--;
+    /// Here are checking the _health if it less then or equal to 0
+    if(_health<=0){
+      /// Then we are simply removing the asteroid from or game
+      removeFromParent();
+    }
+  }
 
 }
