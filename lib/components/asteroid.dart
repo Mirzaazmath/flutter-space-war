@@ -25,6 +25,10 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
   final double _maxHealth=3;
   /// this will hold the current health of our asteroid
   late double _health;
+  /// _originalVelocity will help us to track the _velocity for our asteroid
+  final  Vector2 _originalVelocity = Vector2.zero();
+  ///  _isKnockBack will handle the bounce back effect when user hit the asteroid multiple times
+  bool _isKnockBack = false;
 
   /// Here we have created a constructor with one required that is position
   /// and  with some default value like size and anchor
@@ -34,6 +38,8 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
   Asteriod({required super.position, double size = _maxSize})
     : super(size: Vector2.all(size), anchor: Anchor.center, priority: -1) {
     _velocity = _generateVelocity();
+    /// Here we are setting the _originalVelocity from _velocity to track the asteroid falling velocity
+    _originalVelocity.setFrom(_velocity);
     _spinSpeed=_random.nextDouble()*1.5-0.75;
     _health = size/_maxSize*_maxHealth;
     /// Here we have added the CircleHitbox to our Asteriod to handle collision
@@ -106,6 +112,8 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
     }else{
       /// Here we are calling the _flashWhite method for flash effect
       _flashWhite();
+      /// Here we are calling the _applyKnockBack for bounce back effect
+      _applyKnockBack();
     }
   }
   /// Here we have created the _flashWhite method
@@ -116,7 +124,36 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
      alternate: true,
      curve: Curves.easeInOut,
    ));
+   /// Here we have added the flashEffect into our asteroid component in our game
    add(flashEffect);
+
   }
 
+/// Here we have created _applyKnockBack to add the bounce back Effect ot our asteroid whenever it hits
+  void _applyKnockBack(){
+    /// Here we are checking the _isKnockBack is true or not to prevent the same bounce effect for every hit
+    if(_isKnockBack)return;
+    /// Here wer are changing the_isKnockBack value
+    _isKnockBack = true;
+    /// Here we are setting the asteroid velocity to zero
+    _velocity.setZero();
+    /// Here we have created the knockBackEffect for our bounce back Effect
+    /// MoveByEffect( position , controller)
+    final MoveByEffect knockBackEffect = MoveByEffect(Vector2(0,-20), EffectController(duration: 0.1),
+      /// Here onComplete we are calling _restoreVelocity
+      onComplete: _restoreVelocity
+    );
+    /// Here we added the knockBackEffect in our asteroid component
+    add(knockBackEffect);
+  }
+  /// Here we have created the _restoreVelocity to restore our velocity of asteroid
+  /// component after the bounce back effect
+  void _restoreVelocity(){
+    /// Here we are again setting the _velocity with _originalVelocity
+    _velocity.setFrom(_originalVelocity);
+    /// Here wer are changing the_isKnockBack value
+    _isKnockBack = false;
+  }
 }
+
+
