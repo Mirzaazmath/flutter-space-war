@@ -120,7 +120,7 @@ class MyGame extends FlameGame  with HasKeyboardHandlerComponents,HasCollisionDe
     ///  selfPositioning means you will allow to use random position
     _asteroidsSpawnComponent = SpawnComponent.periodRange(
       /// Here we calling the _generateRandomSpawnPosition to get every time a random position for our asteroid
-      factory: (index) => Asteriod(position: _generateRandomSpawnPosition()),
+      factory: (index) => Asteroid(position: _generateRandomSpawnPosition()),
       minPeriod: 0.7,
       maxPeriod: 1.6,
       selfPositioning: true,

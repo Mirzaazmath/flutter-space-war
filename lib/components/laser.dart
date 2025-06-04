@@ -36,7 +36,7 @@ class Laser extends SpriteComponent with HasGameReference<MyGame>,CollisionCallb
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     /// Here we are checking the other is Asteriod or not
-    if(other is Asteriod){
+    if(other is Asteroid){
       /// If Yes Then
       /// We are removing the laser from our game
       removeFromParent();

@@ -9,7 +9,7 @@ import 'package:space_war/components/explosion.dart';
 import 'package:space_war/my_game.dart';
 
 /// Class to Create asteroids
-class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
+class Asteroid extends SpriteComponent with HasGameReference<MyGame> {
   /// Here we have created a _random variable of type Random()
   /// for our random asteroids
   final Random _random = Random();
@@ -40,7 +40,7 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
   /// size: Vector2.all(120), means size of our Asteriod
   /// anchor: Anchor.center Alignment of our  Asteriod
   /// _health = size/_maxSize*_maxHealth;  will define the health of the asteroid
-  Asteriod({required super.position, double size = _maxSize})
+  Asteroid({required super.position, double size = _maxSize})
     : super(size: Vector2.all(size), anchor: Anchor.center, priority: -1) {
     _velocity = _generateVelocity();
 
@@ -123,6 +123,8 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
 
       /// Here we are calling the _createExplosion to show the Explosion once the asteroid destroyed
       _createExplosion();
+      /// Here we are calling  the _splitAsteroid to split the asteroid into small fragments
+      _splitAsteroid();
     } else {
       /// Here we are calling the _flashWhite method for flash effect
       _flashWhite();
@@ -189,4 +191,17 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
     /// Here we have added our explosion in our game component
     game.add(explosion);
   }
+  /// Here we have created _splitAsteroid to slit the asteroid into small fragments
+  void _splitAsteroid(){
+    /// Here we are checking the size of the asteroid if it is small then we are simple return nothing
+    if(size.x<=_maxSize/3)return;
+    /// if the asteroid is big then we are creating the 3 smaller fragment from that asteroid via looping
+    for(int i =0;i<3;i++){
+      /// Here we are creating small fragment with same position and smaller size
+      final Asteroid fragment = Asteroid(position:position.clone(),size: size.x-_maxSize/3);
+      /// Here we are adding the fragment into our game
+      game.add(fragment);
+    }
+  }
+
 }
