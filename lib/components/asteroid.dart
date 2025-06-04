@@ -18,15 +18,21 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
   late Vector2 _velocity;
   /// for handling the speed of the spin of asteroid
   late double _spinSpeed;
+  /// the maximum health of the asteroid for large one
+  final double _maxHealth=3;
+  /// this will hold the current health of our asteroid
+  late double _health;
 
   /// Here we have created a constructor with one required that is position
   /// and  with some default value like size and anchor
   /// size: Vector2.all(120), means size of our Asteriod
   /// anchor: Anchor.center Alignment of our  Asteriod
+  /// _health = size/_maxSize*_maxHealth;  will define the health of the asteroid
   Asteriod({required super.position, double size = _maxSize})
     : super(size: Vector2.all(size), anchor: Anchor.center, priority: -1) {
     _velocity = _generateVelocity();
     _spinSpeed=_random.nextDouble()*1.5-0.75;
+    _health = size/_maxSize*_maxHealth;
     /// Here we have added the CircleHitbox to our Asteriod to handle collision
     add(CircleHitbox());
   }
@@ -86,4 +92,5 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
       position.x=-size.x/2;
     }
   }
+
 }
