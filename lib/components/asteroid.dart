@@ -123,14 +123,21 @@ class Asteroid extends SpriteComponent with HasGameReference<MyGame> {
 
       /// Here we are calling the _createExplosion to show the Explosion once the asteroid destroyed
       _createExplosion();
+
       /// Here we are calling  the _splitAsteroid to split the asteroid into small fragments
       _splitAsteroid();
+
+      /// Here are calling the incrementScore from game component and passing the amount 2 when the asteroid destroyed
+      game.incrementScore(2);
     } else {
       /// Here we are calling the _flashWhite method for flash effect
       _flashWhite();
 
       /// Here we are calling the _applyKnockBack for bounce back effect
       _applyKnockBack();
+
+      /// Here are calling the incrementScore from game component and passing the amount 1 when the asteroid takes the damage
+      game.incrementScore(1);
     }
   }
 
@@ -180,7 +187,8 @@ class Asteroid extends SpriteComponent with HasGameReference<MyGame> {
     /// Here wer are changing the_isKnockBack value
     _isKnockBack = false;
   }
-/// Here we have created _createExplosion method to show the Explosion
+
+  /// Here we have created _createExplosion method to show the Explosion
   void _createExplosion() {
     /// Here we are creating the Explosion with ExplosionType.dust, explosionSize,position of the asteroid
     final Explosion explosion = Explosion(
@@ -188,20 +196,26 @@ class Asteroid extends SpriteComponent with HasGameReference<MyGame> {
       explosionSize: size.x,
       position: position.clone(),
     );
+
     /// Here we have added our explosion in our game component
     game.add(explosion);
   }
+
   /// Here we have created _splitAsteroid to slit the asteroid into small fragments
-  void _splitAsteroid(){
+  void _splitAsteroid() {
     /// Here we are checking the size of the asteroid if it is small then we are simple return nothing
-    if(size.x<=_maxSize/3)return;
+    if (size.x <= _maxSize / 3) return;
+
     /// if the asteroid is big then we are creating the 3 smaller fragment from that asteroid via looping
-    for(int i =0;i<3;i++){
+    for (int i = 0; i < 3; i++) {
       /// Here we are creating small fragment with same position and smaller size
-      final Asteroid fragment = Asteroid(position:position.clone(),size: size.x-_maxSize/3);
+      final Asteroid fragment = Asteroid(
+        position: position.clone(),
+        size: size.x - _maxSize / 3,
+      );
+
       /// Here we are adding the fragment into our game
       game.add(fragment);
     }
   }
-
 }

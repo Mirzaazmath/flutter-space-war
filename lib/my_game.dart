@@ -204,4 +204,11 @@ class MyGame extends FlameGame
     /// Here we are adding the _scoreDisplay TextComponent into our game
     add(_scoreDisplay);
   }
+  /// Here we have created the incrementScore method which will help us to increase the score with given amount
+  void incrementScore(int amount){
+    /// Here we are adding the previous + newAmount
+    _score += amount;
+    /// Here we are setting the _scoreDisplay text with _score value
+    _scoreDisplay.text=_score.toString();
+  }
 }
