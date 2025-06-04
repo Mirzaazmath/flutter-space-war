@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
+import 'package:space_war/components/explosion.dart';
 import 'package:space_war/my_game.dart';
 
 /// Class to Create asteroids
@@ -19,14 +19,19 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
 
   /// Velocity for our Falling asteroids
   late Vector2 _velocity;
+
   /// for handling the speed of the spin of asteroid
   late double _spinSpeed;
+
   /// the maximum health of the asteroid for large one
-  final double _maxHealth=3;
+  final double _maxHealth = 3;
+
   /// this will hold the current health of our asteroid
   late double _health;
+
   /// _originalVelocity will help us to track the _velocity for our asteroid
-  final  Vector2 _originalVelocity = Vector2.zero();
+  final Vector2 _originalVelocity = Vector2.zero();
+
   ///  _isKnockBack will handle the bounce back effect when user hit the asteroid multiple times
   bool _isKnockBack = false;
 
@@ -38,10 +43,12 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
   Asteriod({required super.position, double size = _maxSize})
     : super(size: Vector2.all(size), anchor: Anchor.center, priority: -1) {
     _velocity = _generateVelocity();
+
     /// Here we are setting the _originalVelocity from _velocity to track the asteroid falling velocity
     _originalVelocity.setFrom(_velocity);
-    _spinSpeed=_random.nextDouble()*1.5-0.75;
-    _health = size/_maxSize*_maxHealth;
+    _spinSpeed = _random.nextDouble() * 1.5 - 0.75;
+    _health = size / _maxSize * _maxHealth;
+
     /// Here we have added the CircleHitbox to our Asteriod to handle collision
     add(CircleHitbox());
   }
@@ -69,8 +76,9 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
 
     /// Here we are calling the _handleScreenBounds to handle the Bounds of our screen for asteroids
     _handleScreenBounds();
+
     /// Here we are handling the spin speed the asteroid
-    angle+=_spinSpeed*dt;
+    angle += _spinSpeed * dt;
 
     super.update(dt);
   }
@@ -93,67 +101,92 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
     }
 
     final double screenWidth = game.size.x;
+
     /// Here we are checking the asteroid exceed the width of the screen from either
     /// we are switching position so that it can be visible exactly like player
-    if(position.x<-size.x/2){
-      position.x=screenWidth+size.x/2;
-    }else if(position.x>screenWidth+size.x/2){
-      position.x=-size.x/2;
+    if (position.x < -size.x / 2) {
+      position.x = screenWidth + size.x / 2;
+    } else if (position.x > screenWidth + size.x / 2) {
+      position.x = -size.x / 2;
     }
   }
+
   /// Here we have created the takeDamage method to reduse our asteroid health and when it reach to 0 then we will remove that asteroid from our game
-  void takeDamage(){
+  void takeDamage() {
     /// Here we are decreasing the _health by 1 whenever laser hits the asteroid
     _health--;
+
     /// Here are checking the _health if it less then or equal to 0
-    if(_health<=0){
+    if (_health <= 0) {
       /// Then we are simply removing the asteroid from or game
       removeFromParent();
-    }else{
+
+      /// Here we are calling the _createExplosion to show the Explosion once the asteroid destroyed
+      _createExplosion();
+    } else {
       /// Here we are calling the _flashWhite method for flash effect
       _flashWhite();
+
       /// Here we are calling the _applyKnockBack for bounce back effect
       _applyKnockBack();
     }
   }
-  /// Here we have created the _flashWhite method
-  void _flashWhite(){
-    /// Here we have created the ColorEffect with white color and EffectController
-   final ColorEffect flashEffect = ColorEffect(const Color.fromRGBO(255,255,255,1.0), EffectController(
-     duration: 0.1,
-     alternate: true,
-     curve: Curves.easeInOut,
-   ));
-   /// Here we have added the flashEffect into our asteroid component in our game
-   add(flashEffect);
 
+  /// Here we have created the _flashWhite method
+  void _flashWhite() {
+    /// Here we have created the ColorEffect with white color and EffectController
+    final ColorEffect flashEffect = ColorEffect(
+      const Color.fromRGBO(255, 255, 255, 1.0),
+      EffectController(duration: 0.1, alternate: true, curve: Curves.easeInOut),
+    );
+
+    /// Here we have added the flashEffect into our asteroid component in our game
+    add(flashEffect);
   }
 
-/// Here we have created _applyKnockBack to add the bounce back Effect ot our asteroid whenever it hits
-  void _applyKnockBack(){
+  /// Here we have created _applyKnockBack to add the bounce back Effect ot our asteroid whenever it hits
+  void _applyKnockBack() {
     /// Here we are checking the _isKnockBack is true or not to prevent the same bounce effect for every hit
-    if(_isKnockBack)return;
+    if (_isKnockBack) return;
+
     /// Here wer are changing the_isKnockBack value
     _isKnockBack = true;
+
     /// Here we are setting the asteroid velocity to zero
     _velocity.setZero();
+
     /// Here we have created the knockBackEffect for our bounce back Effect
     /// MoveByEffect( position , controller)
-    final MoveByEffect knockBackEffect = MoveByEffect(Vector2(0,-20), EffectController(duration: 0.1),
+    final MoveByEffect knockBackEffect = MoveByEffect(
+      Vector2(0, -20),
+      EffectController(duration: 0.1),
+
       /// Here onComplete we are calling _restoreVelocity
-      onComplete: _restoreVelocity
+      onComplete: _restoreVelocity,
     );
+
     /// Here we added the knockBackEffect in our asteroid component
     add(knockBackEffect);
   }
+
   /// Here we have created the _restoreVelocity to restore our velocity of asteroid
   /// component after the bounce back effect
-  void _restoreVelocity(){
+  void _restoreVelocity() {
     /// Here we are again setting the _velocity with _originalVelocity
     _velocity.setFrom(_originalVelocity);
+
     /// Here wer are changing the_isKnockBack value
     _isKnockBack = false;
   }
+/// Here we have created _createExplosion method to show the Explosion
+  void _createExplosion() {
+    /// Here we are creating the Explosion with ExplosionType.dust, explosionSize,position of the asteroid
+    final Explosion explosion = Explosion(
+      explosionType: ExplosionType.dust,
+      explosionSize: size.x,
+      position: position.clone(),
+    );
+    /// Here we have added our explosion in our game component
+    game.add(explosion);
+  }
 }
-
-
