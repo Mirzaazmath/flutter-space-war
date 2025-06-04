@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 import 'package:space_war/components/asteroid.dart';
 import 'package:space_war/components/shoot_btn.dart';
 
@@ -12,7 +13,8 @@ import 'components/player.dart';
 
 /// HasKeyboardHandlerComponents will help us with movement of player via keyboard arrows
 /// HasCollisionDetection will help us to hit the target with our laser and also indicate our game that we have Collision in our game
-class MyGame extends FlameGame  with HasKeyboardHandlerComponents,HasCollisionDetection{
+class MyGame extends FlameGame
+    with HasKeyboardHandlerComponents, HasCollisionDetection {
   /// player
   late Player player;
 
@@ -27,6 +29,12 @@ class MyGame extends FlameGame  with HasKeyboardHandlerComponents,HasCollisionDe
 
   /// ShootButton
   late ShootButton _shootButton;
+
+  /// For Counting the score of the player
+  int _score = 0;
+
+  /// For Displaying the score to the user
+  late TextComponent _scoreDisplay;
 
   /// Here we are configuring things while loading game
   @override
@@ -55,8 +63,11 @@ class MyGame extends FlameGame  with HasKeyboardHandlerComponents,HasCollisionDe
     /// Here we are calling the _createShootButton to create a shooter
     _createShootButton();
 
-    /// Here we are Calling the _asteroidSpawn
+    /// Here we are calling the _asteroidSpawn
     _asteroidSpawn();
+
+    /// Here we are calling the _createScoreDisplay to display the player score
+    _createScoreDisplay();
   }
 
   /// Here we are creating the player and adding that player into our game
@@ -148,5 +159,49 @@ class MyGame extends FlameGame  with HasKeyboardHandlerComponents,HasCollisionDe
           ..position = Vector2(size.x - 20, size.y - 20)
           ..priority = 10;
     add(_shootButton);
+  }
+
+  /// Here we have created _createScoreDisplay method  which will display the player score
+  void _createScoreDisplay() {
+    /// Here we are setting the _score to 0 because we want to start fresh everytime
+    _score = 0;
+
+    /// Here are creating the TextComponent
+    _scoreDisplay = TextComponent(
+      /// Text
+      text: "0",
+
+      /// Alignment
+      anchor: Anchor.topCenter,
+
+      /// Position  on Screen
+      position: Vector2(size.x / 2, 20),
+
+      /// Stack Position
+      priority: 10,
+
+      /// TextPaint
+      textRenderer: TextPaint(
+        /// TextStyle
+        style: TextStyle(
+          /// Color
+          color: Colors.white,
+
+          /// FontWeight
+          fontWeight: FontWeight.bold,
+
+          /// FontSize
+          fontSize: 48,
+
+          /// Shadow
+          shadows: [
+            Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 2),
+          ],
+        ),
+      ),
+    );
+
+    /// Here we are adding the _scoreDisplay TextComponent into our game
+    add(_scoreDisplay);
   }
 }
