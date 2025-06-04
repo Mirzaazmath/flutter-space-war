@@ -146,6 +146,7 @@ class Asteroid extends SpriteComponent with HasGameReference<MyGame> {
     /// Here we have created the ColorEffect with white color and EffectController
     final ColorEffect flashEffect = ColorEffect(
       const Color.fromRGBO(255, 255, 255, 1.0),
+      /// alternate means reverse
       EffectController(duration: 0.1, alternate: true, curve: Curves.easeInOut),
     );
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -204,11 +205,28 @@ class MyGame extends FlameGame
     /// Here we are adding the _scoreDisplay TextComponent into our game
     add(_scoreDisplay);
   }
+
   /// Here we have created the incrementScore method which will help us to increase the score with given amount
-  void incrementScore(int amount){
+  void incrementScore(int amount) {
     /// Here we are adding the previous + newAmount
     _score += amount;
+
     /// Here we are setting the _scoreDisplay text with _score value
-    _scoreDisplay.text=_score.toString();
+    _scoreDisplay.text = _score.toString();
+/// Here we are creating ScaleEffect to _scoreDisplay
+    final ScaleEffect popEffect = ScaleEffect.to(
+      /// from all size
+      Vector2.all(1.2),
+      EffectController(
+        /// Duration
+        duration: 0.05,
+        /// Reverse
+        alternate: true,
+        /// Animation curve
+        curve: Curves.easeInOut,
+      ),
+    );
+    /// Here we have added the popEffect into _scoreDisplay Text Component
+    _scoreDisplay.add(popEffect);
   }
 }
