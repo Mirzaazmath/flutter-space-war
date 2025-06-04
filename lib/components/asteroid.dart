@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flutter/material.dart';
 import 'package:space_war/my_game.dart';
 
 /// Class to Create asteroids
@@ -100,7 +103,20 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
     if(_health<=0){
       /// Then we are simply removing the asteroid from or game
       removeFromParent();
+    }else{
+      /// Here we are calling the _flashWhite method for flash effect
+      _flashWhite();
     }
+  }
+  /// Here we have created the _flashWhite method
+  void _flashWhite(){
+    /// Here we have created the ColorEffect with white color and EffectController
+   final ColorEffect flashEffect = ColorEffect(const Color.fromRGBO(255,255,255,1.0), EffectController(
+     duration: 0.1,
+     alternate: true,
+     curve: Curves.easeInOut,
+   ));
+   add(flashEffect);
   }
 
 }
