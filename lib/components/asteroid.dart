@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:space_war/my_game.dart';
 
@@ -26,6 +27,8 @@ class Asteriod extends SpriteComponent with HasGameReference<MyGame> {
     : super(size: Vector2.all(size), anchor: Anchor.center, priority: -1) {
     _velocity = _generateVelocity();
     _spinSpeed=_random.nextDouble()*1.5-0.75;
+    /// Here we have added the CircleHitbox to our Asteriod to handle collision
+    add(CircleHitbox());
   }
 
   @override

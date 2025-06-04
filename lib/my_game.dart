@@ -11,7 +11,8 @@ import 'package:space_war/components/shoot_btn.dart';
 import 'components/player.dart';
 
 /// HasKeyboardHandlerComponents will help us with movement of player via keyboard arrows
-class MyGame extends FlameGame  with HasKeyboardHandlerComponents{
+/// HasCollisionDetection will help us to hit the target with our laser and also indicate our game that we have Collision in our game
+class MyGame extends FlameGame  with HasKeyboardHandlerComponents,HasCollisionDetection{
   /// player
   late Player player;
 
