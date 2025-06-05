@@ -50,6 +50,7 @@ class Asteroid extends SpriteComponent with HasGameReference<MyGame> {
     _health = size / _maxSize * _maxHealth;
 
     /// Here we have added the CircleHitbox to our Asteriod to handle collision
+    /// Hitbox  will hits
     add(CircleHitbox());
   }
 
