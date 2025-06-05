@@ -210,11 +210,15 @@ class Player extends SpriteAnimationComponent
     add(
       OpacityEffect.fadeOut(
         EffectController(duration: 3.0),
+
         /// Here we are stopping the  _explosionTimer once the OpacityEffect is completed
         onComplete: () => _explosionTimer.stop(),
       ),
-
     );
+
+    /// Here we are added the MoveEffect when the player is being destroyed it will goes down
+    add(MoveEffect.by(Vector2(0, 200), EffectController(duration: 3.0)));
+
     /// Here we are adding the RemoveEffect to completely dispose the player once it destroyed
     add(RemoveEffect(delay: 4.0));
 
