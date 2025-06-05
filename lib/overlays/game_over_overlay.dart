@@ -28,7 +28,7 @@ class _GameOverOverlayState extends State<GameOverOverlay> {
         /// Here we are checking the _opacity value if it return to 0
         /// when user clicks on the play again button
         if(_opacity==0.0){
-          /// Here we are remove the over from our game
+          /// Here we are remove the overlay from our game
           widget.game.overlays.remove("GameOver");
         }
       },
@@ -53,7 +53,7 @@ class _GameOverOverlayState extends State<GameOverOverlay> {
               onPressed: () {
                 /// Here are calling the restartGame method to play again
                 widget.game.restartGame();
-                /// Here we are setting the _opacity = 0; 
+                /// Here we are setting the _opacity = 0;
                 setState(() {
                   _opacity=0.0;
                 });

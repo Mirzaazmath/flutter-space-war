@@ -54,8 +54,8 @@ class MyGame extends FlameGame
     /// Here we are calling the _createStars to create background for our game
     _createStars();
 
-    /// Here we are calling the  startGame method
-    startGame();
+    // /// Here we are calling the  startGame method
+    //     // startGame();
 
     return super.onLoad();
   }
