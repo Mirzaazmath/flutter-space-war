@@ -8,6 +8,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:space_war/components/asteroid.dart';
+import 'package:space_war/components/pickup.dart';
 import 'package:space_war/components/shoot_btn.dart';
 
 import 'components/player.dart';
@@ -36,6 +37,9 @@ class MyGame extends FlameGame
 
   /// For Displaying the score to the user
   late TextComponent _scoreDisplay;
+
+  /// Pickup/PowerBooster Spawn
+  late SpawnComponent _pickupSpawn;
 
   /// Here we are configuring things while loading game
   @override
@@ -69,6 +73,8 @@ class MyGame extends FlameGame
 
     /// Here we are calling the _createScoreDisplay to display the player score
     _createScoreDisplay();
+    /// Here we are calling the _createPickupSpawn for powerBooster
+    _createPickupSpawn();;
   }
 
   /// Here we are creating the player and adding that player into our game
@@ -229,4 +235,25 @@ class MyGame extends FlameGame
     /// Here we have added the popEffect into _scoreDisplay Text Component
     _scoreDisplay.add(popEffect);
   }
+
+  /// _createPickupSpawn will generate pickUp/PowerBooster Spawn
+  void _createPickupSpawn() {
+    /// Here we are assigning the _pickupSpawn
+    /// SpawnComponent.periodRange
+    ///  factory: (index)=>PickUp(position: Vector2.zero()), means the widget we want to spawn
+    ///  minPeriod: 0.7,means minimum time
+    ///  maxPeriod: 1.6 means maximum time
+    ///  selfPositioning means you will allow to use random position
+    _pickupSpawn = SpawnComponent.periodRange(
+      /// Here we calling the _generateRandomSpawnPosition to get every time a random position for our pickUp/PowerBooster
+      factory: (index) => PickUp(position: _generateRandomSpawnPosition(), pickupType: PickupType.values[_random.nextInt(PickupType.values.length)]),
+      minPeriod: 0.7,
+      maxPeriod: 1.6,
+      selfPositioning: true,
+    );
+
+    /// Here we are adding our _pickupSpawn into our game
+    add(_pickupSpawn);
+  }
+
 }

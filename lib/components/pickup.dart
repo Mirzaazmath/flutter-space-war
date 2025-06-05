@@ -30,7 +30,7 @@ class PickUp extends SpriteComponent with HasGameReference<MyGame> {
     super.update(dt);
 
     /// Here we also updating the position of our pickup/powerBooster from top to bottom
-    position.y += 300 + dt;
+    position.y += 300 * dt;
 
     /// Here we are checking the pickup/powerBooster reached the bottom or not
     if (position.y > game.size.y + size.y / 2) {
