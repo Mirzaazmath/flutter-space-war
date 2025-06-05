@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/collisions.dart';
@@ -7,6 +8,7 @@ import 'package:flame/effects.dart';
 
 import 'package:flutter/services.dart';
 import 'package:space_war/components/asteroid.dart';
+import 'package:space_war/components/explosion.dart';
 import 'package:space_war/components/laser.dart';
 import 'package:space_war/my_game.dart';
 
@@ -31,6 +33,30 @@ class Player extends SpriteAnimationComponent
 
   /// Created the bool variable to handle the Destruction
   bool _isDestroyed = false;
+
+  /// Created a variable to handle the random explosion
+  Random _random = Random();
+
+  /// Created a variable to handle the  explosion time duration
+  late Timer _explosionTimer;
+
+  /// Here we have created constructor of player to initialize the _explosionTimer
+  Player() {
+    /// Here are assigning the timer ro our _explosionTimer
+    _explosionTimer = Timer(
+      /// With duration
+      0.1,
+
+      /// on Every single tick we calling _createRandomExplosion method to generate the Explosion
+      onTick: _createRandomExplosion,
+
+      /// Here we are setting the repeat value to true until the timer dispose
+      repeat: true,
+
+      /// Here we setting the  autoStart  to false because we don't want to start the timer player created
+      autoStart: false,
+    );
+  }
 
   @override
   FutureOr<void> onLoad() async {
@@ -58,8 +84,13 @@ class Player extends SpriteAnimationComponent
   @override
   void update(double dt) {
     super.update(dt);
+
     /// Here we are checking whether our player is hit by asteroid or not and if its already Destroy then return nothing
-    if(_isDestroyed)return;
+    if (_isDestroyed) {
+      /// if the player is being destroyed at that time only we are updating our explosionTimer
+      _explosionTimer.update(dt);
+      return;
+    }
 
     /// Here position of our player will update
     /// position +=game.joystick.relativeDelta.normalized()*200*dt;
@@ -176,9 +207,22 @@ class Player extends SpriteAnimationComponent
     );
 
     /// Here we are adding the OpacityEffect to our player destruction
-    add(OpacityEffect.fadeOut(EffectController(duration: 3.0)));
+    add(
+      OpacityEffect.fadeOut(
+        EffectController(duration: 3.0),
+        /// Here we are stopping the  _explosionTimer once the OpacityEffect is completed
+        onComplete: () => _explosionTimer.stop(),
+      ),
+
+    );
+    /// Here we are adding the RemoveEffect to completely dispose the player once it destroyed
+    add(RemoveEffect(delay: 4.0));
+
     /// Here we are updating the _isDestroyed value
     _isDestroyed = true;
+
+    /// Here we are starting the timer which will generate the explosion
+    _explosionTimer.start();
   }
 
   /// Here we are handling the Collision of our player by Asteroid
@@ -186,13 +230,36 @@ class Player extends SpriteAnimationComponent
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
 
-   /// Here we are checking whether our player is hit by asteroid or not and if its already Destroy then return nothing
-    if(_isDestroyed)return;
+    /// Here we are checking whether our player is hit by asteroid or not and if its already Destroy then return nothing
+    if (_isDestroyed) return;
 
     /// Here we are checking whether our player is hit by asteroid or not
     if (other is Asteroid) {
       /// if yes then we are calling the _handleDestruction
       _handleDestruction();
     }
+  }
+
+  /// Here we have created a _createRandomExplosion method to create Explosion when player is being destroyed
+  void _createRandomExplosion() {
+    /// Here we have  created a variable to get the some random position from player destruction position with some left/right extended random positions
+    final Vector2 explosionPosition = Vector2(
+      position.x - size.x / 2 + _random.nextDouble() * size.x,
+      position.y - size.y / 2 + _random.nextDouble() * size.y,
+    );
+
+    /// Here we have created ExplosionType variable  with random enum
+    final ExplosionType explosionType =
+        _random.nextBool() ? ExplosionType.smoke : ExplosionType.fire;
+
+    /// Here we have created a Explosion with given properties
+    final Explosion explosion = Explosion(
+      explosionType: explosionType,
+      explosionSize: size.x * 0.7,
+      position: explosionPosition,
+    );
+
+    /// Here we adding the explosion for player into our game
+    game.add(explosion);
   }
 }
