@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -9,7 +10,8 @@ import 'package:space_war/my_game.dart';
 class Laser extends SpriteComponent with HasGameReference<MyGame>,CollisionCallbacks {
   ///anchor: Anchor.center, means align of the laser
   ///priority: -1  means stack position
-  Laser({required super.position}) : super(anchor: Anchor.center, priority: -1);
+  ///angle specify the angle of our laser and direction where it is going
+  Laser({required super.position,super.angle=0.0}) : super(anchor: Anchor.center, priority: -1);
   @override
   FutureOr<void> onLoad() async {
     /// Here we are loading the laser sprite from our assets
@@ -23,7 +25,11 @@ class Laser extends SpriteComponent with HasGameReference<MyGame>,CollisionCallb
 
   void update(dt) {
     /// Here we are updating the position of our laser
-    position.y -= 500 * dt;
+   // position.y -= 500 * dt;
+    /// Here we are updating the position of our laser with the given direction
+    /// -cos(angle) means upward direction
+    /// sin(angle) angle direction
+    position += Vector2(sin(angle), -cos(angle))*500 * dt;
      /// Here we are checking the laser position if exceed or not
     if (position.y < -size.y / 2) {
       /// Here we are removing the laser if it exceed the device height to reduse the memory load of our device

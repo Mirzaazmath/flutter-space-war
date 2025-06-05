@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:space_war/components/asteroid.dart';
 import 'package:space_war/components/explosion.dart';
 import 'package:space_war/components/laser.dart';
+import 'package:space_war/components/pickup.dart';
 import 'package:space_war/my_game.dart';
 
 /// Here we are creating  a player component with HasGameReference
@@ -40,6 +41,9 @@ class Player extends SpriteAnimationComponent
   /// Created a variable to handle the  explosion time duration
   late Timer _explosionTimer;
 
+  /// Created a variable to handle the  laser powerBooster time duration
+  late Timer _laserPowerBoosterTimer;
+
   /// Here we have created constructor of player to initialize the _explosionTimer
   Player() {
     /// Here are assigning the timer ro our _explosionTimer
@@ -56,6 +60,9 @@ class Player extends SpriteAnimationComponent
       /// Here we setting the  autoStart  to false because we don't want to start the timer player created
       autoStart: false,
     );
+
+    /// Here are assigning the timer ro our _laserPowerBoosterTimer with 10 second duration
+    _laserPowerBoosterTimer = Timer(10.0, autoStart: false);
   }
 
   @override
@@ -80,8 +87,10 @@ class Player extends SpriteAnimationComponent
         /// Here we defining the height and width of our Hitbox
         /// 0.6, 0.9 means the size from parent size like 60 percent of actual width and 90 percent of actual height
         Vector2(0.6, 0.9),
+
         /// Here we are passing the parentSize which means our player size
         parentSize: size,
+
         /// Here we are aligning the Hitbox to center
         anchor: Anchor.center,
       ),
@@ -102,6 +111,11 @@ class Player extends SpriteAnimationComponent
       /// if the player is being destroyed at that time only we are updating our explosionTimer
       _explosionTimer.update(dt);
       return;
+    }
+    /// Here we are checking whether our player is hit by laser power pickup or not
+    if(_laserPowerBoosterTimer.isRunning()){
+      /// if the player is in _laserPowerBoosterTimer .isRunning() state at that time only we are updating our _laserPowerBoosterTimer
+      _laserPowerBoosterTimer.update(dt);
     }
 
     /// Here position of our player will update
@@ -166,6 +180,23 @@ class Player extends SpriteAnimationComponent
   void _fireLaser() {
     /// Here added Laser to our game with player position clone + playerHalfHeight
     game.add(Laser(position: position.clone() + Vector2(0, -size.y / 2)));
+
+    /// Here we are checking if the _laserPowerBoosterTimer has started and running
+    if (_laserPowerBoosterTimer.isRunning()) {
+      /// If yes the we are adding to more laser in our game with 15 angle from both side
+      game.add(
+        Laser(
+          position: position.clone() + Vector2(0, -size.y / 2),
+          angle: 15 * degrees2Radians,
+        ),
+      );
+      game.add(
+        Laser(
+          position: position.clone() + Vector2(0, -size.y / 2),
+          angle: -15 * degrees2Radians,
+        ),
+      );
+    }
   }
 
   /// Here we are handling the physical keyboard KeyEvent
@@ -253,6 +284,25 @@ class Player extends SpriteAnimationComponent
     if (other is Asteroid) {
       /// if yes then we are calling the _handleDestruction
       _handleDestruction();
+
+      /// Here we are checking if the player is hit by PickUp/powerBooster
+    } else if (other is PickUp) {
+      /// if yes then we are removing our PickUp from our game
+      other.removeFromParent();
+
+      /// and also we are increasing the score by 1
+      game.incrementScore(1);
+
+      /// Here we are activating the pickup/powerBooster
+      switch (other.pickupType) {
+        case PickupType.laser:
+          _laserPowerBoosterTimer.start();
+          break;
+        case PickupType.bomb:
+          break;
+        case PickupType.shield:
+          break;
+      }
     }
   }
 

@@ -29,7 +29,7 @@ class PickUp extends SpriteComponent with HasGameReference<MyGame> {
     final ScaleEffect pulsatingEffect = ScaleEffect.to(
       /// Here we are defining the size  of how much the Scale would go
       /// as of now we are shrink it to its 80% of its actual size
-      Vector2.all(0.8),
+      Vector2.all(0.9),
 
       /// Here we are defining the Controller for our effect
       EffectController(
