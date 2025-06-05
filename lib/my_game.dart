@@ -12,6 +12,7 @@ import 'package:space_war/components/pickup.dart';
 import 'package:space_war/components/shoot_btn.dart';
 
 import 'components/player.dart';
+import 'components/star.dart';
 
 /// HasKeyboardHandlerComponents will help us with movement of player via keyboard arrows
 /// HasCollisionDetection will help us to hit the target with our laser and also indicate our game that we have Collision in our game
@@ -50,6 +51,9 @@ class MyGame extends FlameGame
     /// Here we are setting our device in  portraitMode
     await Flame.device.setPortrait();
 
+    /// Here we are calling the _createStars to create background for our game
+    _createStars();
+
     /// Here we are calling the  startGame method
     startGame();
 
@@ -73,8 +77,10 @@ class MyGame extends FlameGame
 
     /// Here we are calling the _createScoreDisplay to display the player score
     _createScoreDisplay();
+
     /// Here we are calling the _createPickupSpawn for powerBooster
-    _createPickupSpawn();;
+    _createPickupSpawn();
+    ;
   }
 
   /// Here we are creating the player and adding that player into our game
@@ -219,19 +225,23 @@ class MyGame extends FlameGame
 
     /// Here we are setting the _scoreDisplay text with _score value
     _scoreDisplay.text = _score.toString();
-/// Here we are creating ScaleEffect to _scoreDisplay
+
+    /// Here we are creating ScaleEffect to _scoreDisplay
     final ScaleEffect popEffect = ScaleEffect.to(
       /// from all size
       Vector2.all(1.2),
       EffectController(
         /// Duration
         duration: 0.05,
+
         /// Reverse
         alternate: true,
+
         /// Animation curve
         curve: Curves.easeInOut,
       ),
     );
+
     /// Here we have added the popEffect into _scoreDisplay Text Component
     _scoreDisplay.add(popEffect);
   }
@@ -246,7 +256,12 @@ class MyGame extends FlameGame
     ///  selfPositioning means you will allow to use random position
     _pickupSpawn = SpawnComponent.periodRange(
       /// Here we calling the _generateRandomSpawnPosition to get every time a random position for our pickUp/PowerBooster
-      factory: (index) => PickUp(position: _generateRandomSpawnPosition(), pickupType: PickupType.values[_random.nextInt(PickupType.values.length)]),
+      factory:
+          (index) => PickUp(
+            position: _generateRandomSpawnPosition(),
+            pickupType:
+                PickupType.values[_random.nextInt(PickupType.values.length)],
+          ),
       minPeriod: 5.0,
       maxPeriod: 10.0,
       selfPositioning: true,
@@ -256,4 +271,11 @@ class MyGame extends FlameGame
     add(_pickupSpawn);
   }
 
+  /// Here we are creating the star for our game background
+  void _createStars() {
+    /// Here we are creating the 50 stars for background
+    for (int i = 0; i < 50; i++) {
+      add(Star()..priority = -10);
+    }
+  }
 }
