@@ -278,8 +278,9 @@ class MyGame extends FlameGame
       add(Star()..priority = -10);
     }
   }
-
+/// Here playerDied will display a overlay of GameOver and pauseEngine when the player died
   void playerDied(){
     overlays.add("GameOver");
+    pauseEngine();
   }
 }
