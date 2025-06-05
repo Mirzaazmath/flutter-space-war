@@ -278,4 +278,8 @@ class MyGame extends FlameGame
       add(Star()..priority = -10);
     }
   }
+
+  void playerDied(){
+    overlays.add("GameOver");
+  }
 }

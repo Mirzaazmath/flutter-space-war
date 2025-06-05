@@ -267,7 +267,7 @@ class Player extends SpriteAnimationComponent
     add(MoveEffect.by(Vector2(0, 200), EffectController(duration: 3.0)));
 
     /// Here we are adding the RemoveEffect to completely dispose the player once it destroyed
-    add(RemoveEffect(delay: 4.0));
+    add(RemoveEffect(delay: 4.0,onComplete: game.playerDied));
 
     /// Here we are updating the _isDestroyed value
     _isDestroyed = true;
