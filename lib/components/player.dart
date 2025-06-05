@@ -73,7 +73,19 @@ class Player extends SpriteAnimationComponent
     size *= 0.3;
 
     /// Here we have added  RectangleHitbox to our player so it can take hits
-    add(RectangleHitbox());
+    /// Here we are using the relative because the RectangleHitbox size much larger then the actual size
+    /// if use the relative the we can adjust the RectangleHitbox size
+    add(
+      RectangleHitbox.relative(
+        /// Here we defining the height and width of our Hitbox
+        /// 0.6, 0.9 means the size from parent size like 60 percent of actual width and 90 percent of actual height
+        Vector2(0.6, 0.9),
+        /// Here we are passing the parentSize which means our player size
+        parentSize: size,
+        /// Here we are aligning the Hitbox to center
+        anchor: Anchor.center,
+      ),
+    );
 
     return super.onLoad();
   }
