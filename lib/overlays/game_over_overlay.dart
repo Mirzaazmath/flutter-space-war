@@ -24,6 +24,14 @@ class _GameOverOverlayState extends State<GameOverOverlay> {
   @override
   Widget build(BuildContext context) {
     return AnimatedOpacity(
+      onEnd: (){
+        /// Here we are checking the _opacity value if it return to 0
+        /// when user clicks on the play again button
+        if(_opacity==0.0){
+          /// Here we are remove the over from our game
+          widget.game.overlays.remove("GameOver");
+        }
+      },
       opacity: _opacity,
       duration: const Duration(milliseconds: 500),
       child: Container(
@@ -42,7 +50,14 @@ class _GameOverOverlayState extends State<GameOverOverlay> {
             ),
             const SizedBox(height: 30),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                /// Here are calling the restartGame method to play again
+                widget.game.restartGame();
+                /// Here we are setting the _opacity = 0; 
+                setState(() {
+                  _opacity=0.0;
+                });
+              },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                 backgroundColor: Colors.blue,

@@ -278,9 +278,42 @@ class MyGame extends FlameGame
       add(Star()..priority = -10);
     }
   }
-/// Here playerDied will display a overlay of GameOver and pauseEngine when the player died
-  void playerDied(){
+
+  /// Here playerDied will display a overlay of GameOver and pauseEngine when the player died
+  void playerDied() {
     overlays.add("GameOver");
+
+    /// Here we are pausing the game engine
     pauseEngine();
+  }
+
+  /// Here restartGame will again start the game
+  void restartGame() {
+    /// Here Before we start again our game we are clearing the previous game components
+    /// like Asteroid and PickUp/PowerBoosters
+    children.whereType<PositionComponent>().forEach((component) {
+      if (component is Asteroid || component is PickUp) {
+        remove(component);
+      }
+    });
+
+    /// Here are also starting the Spawner
+    /// For Asteroids
+    _asteroidsSpawnComponent.timer.start();
+
+    /// For PickUp/PowerBoosters
+    _pickupSpawn.timer.start();
+
+    /// Here we are setting the score before starting the game
+    _score = 0;
+
+    /// Here we are setting the score Display Text before starting the game
+    _scoreDisplay.text = "0";
+
+    /// Here we are _createPLayer to create a new player because previous one was destroyed
+    _createPLayer();
+
+    /// Here we are resuming the game engine
+    resumeEngine();
   }
 }
