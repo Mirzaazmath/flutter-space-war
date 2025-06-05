@@ -51,7 +51,8 @@ class Asteroid extends SpriteComponent with HasGameReference<MyGame> {
 
     /// Here we have added the CircleHitbox to our Asteriod to handle collision
     /// Hitbox  will hits
-    add(CircleHitbox());
+    /// collisionType: CollisionType.passive means no hit consider between Asteroid
+    add(CircleHitbox(collisionType: CollisionType.passive));
   }
 
   @override

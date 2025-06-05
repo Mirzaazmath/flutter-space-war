@@ -9,13 +9,14 @@ import 'package:space_war/my_game.dart';
 
 /// Here we have created Bomb class that extends SpriteComponent with HasGameReference of myGame and also CollisionCallbacks
 class Bomb extends SpriteComponent with HasGameReference<MyGame>,CollisionCallbacks{
-  Bomb({required super.position}):super(size: Vector2.all(1),anchor: Anchor.center);
+  Bomb({required super.position}):super(size: Vector2.all(1),anchor: Anchor.center,priority: -1);
   @override
   FutureOr<void> onLoad()async {
     /// Here we are loading the bomb sprite
     sprite = await game.loadSprite("bomb.png");
     /// Here we are adding the CircleHitbox to our bomb component
-    add(CircleHitbox());
+    /// isSolid: true means it will act as solid and whatever come inside will also be destroyed
+    add(CircleHitbox(isSolid: true));
     /// Here we have added the no of Effect in order by using SequenceEffect
     add(SequenceEffect([
       /// This SizeEffect will increase the Size of the bomb

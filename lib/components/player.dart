@@ -8,6 +8,7 @@ import 'package:flame/effects.dart';
 
 import 'package:flutter/services.dart';
 import 'package:space_war/components/asteroid.dart';
+import 'package:space_war/components/bomb.dart';
 import 'package:space_war/components/explosion.dart';
 import 'package:space_war/components/laser.dart';
 import 'package:space_war/components/pickup.dart';
@@ -302,6 +303,7 @@ class Player extends SpriteAnimationComponent
           _laserPowerBoosterTimer.start();
           break;
         case PickupType.bomb:
+          game.add(Bomb(position: position.clone()));
           break;
         case PickupType.shield:
           if(activeShield!=null){
