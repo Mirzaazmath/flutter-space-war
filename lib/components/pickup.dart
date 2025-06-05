@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flutter/material.dart';
 import 'package:space_war/my_game.dart';
 
 /// Here we have created an enum to pickup/powerBooster
@@ -22,6 +24,32 @@ class PickUp extends SpriteComponent with HasGameReference<MyGame> {
 
     /// Here we are also adding the CircleHitbox to get the pickup/powerBooster a hit
     add(CircleHitbox());
+
+    /// Here we are adding the ScaleEffect to our pickup/powerBooster component
+    final ScaleEffect pulsatingEffect = ScaleEffect.to(
+      /// Here we are defining the size  of how much the Scale would go
+      /// as of now we are shrink it to its 80% of its actual size
+      Vector2.all(0.8),
+
+      /// Here we are defining the Controller for our effect
+      EffectController(
+        /// duration
+        duration: 0.6,
+
+        /// Reverse
+        alternate: true,
+
+        /// Loop
+        infinite: true,
+
+        /// animation
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    /// Here we are adding our pulsatingEffect to our pickup/powerBooster component
+    add(pulsatingEffect);
+
     return super.onLoad();
   }
 
