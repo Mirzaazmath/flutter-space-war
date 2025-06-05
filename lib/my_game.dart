@@ -316,4 +316,20 @@ class MyGame extends FlameGame
     /// Here we are resuming the game engine
     resumeEngine();
   }
+  void quitGame(){
+    /// Here Before we start again our game we are clearing the previous game components
+    children.whereType<PositionComponent>().forEach((component) {
+      /// Here we are removing every component except Star from our screen
+      if (component is! Star) {
+        remove(component);
+      }
+    });
+    /// Here we are also removing the _asteroidsSpawnComponent and _pickupSpawn from our game
+    remove(_asteroidsSpawnComponent);
+    remove(_pickupSpawn);
+    /// Here we are adding Title overlay again like homeScreen
+    overlays.add("Title");
+    /// Here we are resuming the game engine
+    resumeEngine();
+  }
 }

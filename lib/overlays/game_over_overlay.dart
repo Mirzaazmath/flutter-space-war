@@ -76,7 +76,14 @@ class _GameOverOverlayState extends State<GameOverOverlay> {
             ),
             const SizedBox(height: 10),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                /// Here are calling the quitGame method to close the game
+                widget.game.quitGame();
+                /// Here we are setting the _opacity = 0;
+                setState(() {
+                  _opacity=0.0;
+                });
+              },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                 backgroundColor: Colors.blue,
