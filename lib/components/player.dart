@@ -10,7 +10,8 @@ import 'package:space_war/my_game.dart';
 /// Here we are creating  a player component with HasGameReference
 /// HasGameReference provide us the GameReference so we can access the game elements
 /// Here we are also added KeyboardHandler to control our game with physical
-class Player extends SpriteComponent
+///  After Sometime we have change sprite component to SpriteAnimationComponent  for player to animate
+class Player extends SpriteAnimationComponent
     with HasGameReference<MyGame>, KeyboardHandler {
   /// Created a variable to handle the shooting of the laser
   bool _isShooting = false;
@@ -25,10 +26,13 @@ class Player extends SpriteComponent
   final Vector2 _keyBoardMovement = Vector2.zero();
   @override
   FutureOr<void> onLoad() async {
-    /// here we are setting the player in sprite with the help of
+    /// Here we are setting the player in sprite with the help of
     /// loadSprite method and passing the assets name
     /// it will automatically search it from assets/ images folder
-    sprite = await game.loadSprite("player_blue_on0.png");
+   // sprite = await game.loadSprite("player_blue_on0.png");
+
+    /// Here we are calling the _loadAnimation to load our animated sprite player
+    animation = await _loadAnimation();
 
     /// Here we are adjusting the size of our player
     /// we have reduced the size to 1/3 of its original size
@@ -126,5 +130,17 @@ class Player extends SpriteComponent
         keysPressed.contains(LogicalKeyboardKey.arrowDown) ? 1 : 0;
 
     return true;
+  }
+  /// Here we have created _loadAnimation which wil return the SpriteAnimation
+  Future<SpriteAnimation>_loadAnimation ()async{
+    /// Here we are returning the SpriteAnimation with spriteList
+    /// this will switch between to Sprite images so it will look
+    return SpriteAnimation.spriteList([
+      await game.loadSprite("player_blue_on0.png"),
+      await game.loadSprite("player_blue_on1.png")
+
+    ], stepTime: 0.1,
+      loop: true,
+    );
   }
 }
