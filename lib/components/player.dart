@@ -11,6 +11,7 @@ import 'package:space_war/components/asteroid.dart';
 import 'package:space_war/components/explosion.dart';
 import 'package:space_war/components/laser.dart';
 import 'package:space_war/components/pickup.dart';
+import 'package:space_war/components/sheild.dart';
 import 'package:space_war/my_game.dart';
 
 /// Here we are creating  a player component with HasGameReference
@@ -43,6 +44,8 @@ class Player extends SpriteAnimationComponent
 
   /// Created a variable to handle the  laser powerBooster time duration
   late Timer _laserPowerBoosterTimer;
+  /// Created a variable to handle the Shield powerBooster
+  Shield? activeShield;
 
   /// Here we have created constructor of player to initialize the _explosionTimer
   Player() {
@@ -301,6 +304,11 @@ class Player extends SpriteAnimationComponent
         case PickupType.bomb:
           break;
         case PickupType.shield:
+          if(activeShield!=null){
+            remove(activeShield!);
+          }
+          activeShield = Shield();
+          add(activeShield!);
           break;
       }
     }
