@@ -58,6 +58,8 @@ class Player extends SpriteAnimationComponent
   @override
   void update(double dt) {
     super.update(dt);
+    /// Here we are checking whether our player is hit by asteroid or not and if its already Destroy then return nothing
+    if(_isDestroyed)return;
 
     /// Here position of our player will update
     /// position +=game.joystick.relativeDelta.normalized()*200*dt;
