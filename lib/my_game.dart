@@ -241,14 +241,14 @@ class MyGame extends FlameGame
     /// Here we are assigning the _pickupSpawn
     /// SpawnComponent.periodRange
     ///  factory: (index)=>PickUp(position: Vector2.zero()), means the widget we want to spawn
-    ///  minPeriod: 0.7,means minimum time
-    ///  maxPeriod: 1.6 means maximum time
+    ///  minPeriod: 5.0,means minimum time
+    ///  maxPeriod: 10.o means maximum time
     ///  selfPositioning means you will allow to use random position
     _pickupSpawn = SpawnComponent.periodRange(
       /// Here we calling the _generateRandomSpawnPosition to get every time a random position for our pickUp/PowerBooster
       factory: (index) => PickUp(position: _generateRandomSpawnPosition(), pickupType: PickupType.values[_random.nextInt(PickupType.values.length)]),
-      minPeriod: 0.7,
-      maxPeriod: 1.6,
+      minPeriod: 5.0,
+      maxPeriod: 10.0,
       selfPositioning: true,
     );
 
