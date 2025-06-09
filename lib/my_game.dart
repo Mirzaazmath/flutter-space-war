@@ -8,6 +8,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:space_war/components/asteroid.dart';
+import 'package:space_war/components/audio_manager.dart';
 import 'package:space_war/components/pickup.dart';
 import 'package:space_war/components/shoot_btn.dart';
 
@@ -48,6 +49,9 @@ class MyGame extends FlameGame
   /// Selected player option
   int playerColorIndex = 0;
 
+  /// Created a variable to handle audio in our game
+  late final AudioManager _audioManager;
+
   /// Here we are configuring things while loading game
   @override
   FutureOr<void> onLoad() async {
@@ -56,6 +60,15 @@ class MyGame extends FlameGame
 
     /// Here we are setting our device in  portraitMode
     await Flame.device.setPortrait();
+
+    /// Here we are initializing the _audioManager
+    _audioManager = AudioManager();
+
+    /// Here we are adding the music player to our game
+    await add(_audioManager);
+
+    /// After adding the _audioManager we are playing the music
+    _audioManager.playMusic();
 
     /// Here we are calling the _createStars to create background for our game
     _createStars();
