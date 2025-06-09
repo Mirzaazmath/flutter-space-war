@@ -115,6 +115,7 @@ class Asteroid extends SpriteComponent with HasGameReference<MyGame> {
 
   /// Here we have created the takeDamage method to reduse our asteroid health and when it reach to 0 then we will remove that asteroid from our game
   void takeDamage() {
+    game.audioManager.playSound("hit");
     /// Here we are decreasing the _health by 1 whenever laser hits the asteroid
     _health--;
 

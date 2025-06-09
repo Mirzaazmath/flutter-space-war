@@ -50,7 +50,7 @@ class MyGame extends FlameGame
   int playerColorIndex = 0;
 
   /// Created a variable to handle audio in our game
-  late final AudioManager _audioManager;
+  late final AudioManager audioManager;
 
   /// Here we are configuring things while loading game
   @override
@@ -62,13 +62,13 @@ class MyGame extends FlameGame
     await Flame.device.setPortrait();
 
     /// Here we are initializing the _audioManager
-    _audioManager = AudioManager();
+    audioManager = AudioManager();
 
     /// Here we are adding the music player to our game
-    await add(_audioManager);
+    await add(audioManager);
 
     /// After adding the _audioManager we are playing the music
-    _audioManager.playMusic();
+    audioManager.playMusic();
 
     /// Here we are calling the _createStars to create background for our game
     _createStars();

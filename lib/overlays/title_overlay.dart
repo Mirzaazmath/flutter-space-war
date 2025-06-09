@@ -24,12 +24,12 @@ class _TitleOverlayState extends State<TitleOverlay> {
   @override
   Widget build(BuildContext context) {
     /// Here we are getting the player color from my game
-    String playerColor= widget.game.playerColors[widget.game.playerColorIndex];
+    String playerColor = widget.game.playerColors[widget.game.playerColorIndex];
     return AnimatedOpacity(
-      onEnd: (){
+      onEnd: () {
         /// Here we are checking the _opacity value if it return to 0
         /// when user clicks on the play  button
-        if(_opacity==0.0){
+        if (_opacity == 0.0) {
           /// Here we are remove the overlay  from our game
           widget.game.overlays.remove("Title");
         }
@@ -47,12 +47,16 @@ class _TitleOverlayState extends State<TitleOverlay> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () { setState(() {
-                    widget.game.playerColorIndex--;
-                    if(widget.game.playerColorIndex<=0){
-                      widget.game.playerColorIndex=widget.game.playerColors.length-1;
-                    }
-                  });},
+                  onTap: () {
+                    widget.game.audioManager.playSound("click");
+                    setState(() {
+                      widget.game.playerColorIndex--;
+                      if (widget.game.playerColorIndex <= 0) {
+                        widget.game.playerColorIndex =
+                            widget.game.playerColors.length - 1;
+                      }
+                    });
+                  },
                   child: Transform.flip(
                     flipX: true,
                     child: SizedBox(
@@ -62,18 +66,23 @@ class _TitleOverlayState extends State<TitleOverlay> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 30,right: 30,top: 30),
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 30),
                   child: SizedBox(
                     width: 100,
-                    child: Image.asset("assets/images/player_${playerColor}_off.png",gaplessPlayback: true,),
+                    child: Image.asset(
+                      "assets/images/player_${playerColor}_off.png",
+                      gaplessPlayback: true,
+                    ),
                   ),
                 ),
                 GestureDetector(
                   onTap: () {
                     setState(() {
+                      widget.game.audioManager.playSound("click");
                       widget.game.playerColorIndex++;
-                      if(widget.game.playerColorIndex==widget.game.playerColors.length){
-                        widget.game.playerColorIndex=0;
+                      if (widget.game.playerColorIndex ==
+                          widget.game.playerColors.length) {
+                        widget.game.playerColorIndex = 0;
                       }
                     });
                   },
@@ -87,6 +96,7 @@ class _TitleOverlayState extends State<TitleOverlay> {
             const SizedBox(height: 10),
             GestureDetector(
               onTap: () {
+                widget.game.audioManager.playSound("start");
                 /// Here we are starting the game
                 widget.game.startGame();
 

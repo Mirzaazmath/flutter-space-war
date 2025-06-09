@@ -51,6 +51,7 @@ class _GameOverOverlayState extends State<GameOverOverlay> {
             const SizedBox(height: 30),
             TextButton(
               onPressed: () {
+                widget.game.audioManager.playSound("click");
                 /// Here are calling the restartGame method to play again
                 widget.game.restartGame();
                 /// Here we are setting the _opacity = 0;
@@ -77,6 +78,7 @@ class _GameOverOverlayState extends State<GameOverOverlay> {
             const SizedBox(height: 10),
             TextButton(
               onPressed: () {
+                widget.game.audioManager.playSound("click");
                 /// Here are calling the quitGame method to close the game
                 widget.game.quitGame();
                 /// Here we are setting the _opacity = 0;

@@ -12,6 +12,7 @@ class Bomb extends SpriteComponent with HasGameReference<MyGame>,CollisionCallba
   Bomb({required super.position}):super(size: Vector2.all(1),anchor: Anchor.center,priority: -1);
   @override
   FutureOr<void> onLoad()async {
+    game.audioManager.playSound("fire");
     /// Here we are loading the bomb sprite
     sprite = await game.loadSprite("bomb.png");
     /// Here we are adding the CircleHitbox to our bomb component

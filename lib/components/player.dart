@@ -190,6 +190,7 @@ class Player extends SpriteAnimationComponent
 
   /// Here we are added the Laser to our _fireLaser method
   void _fireLaser() {
+    game.audioManager.playSound("laser");
     /// Here added Laser to our game with player position clone + playerHalfHeight
     game.add(Laser(position: position.clone() + Vector2(0, -size.y / 2)));
 
@@ -301,6 +302,7 @@ class Player extends SpriteAnimationComponent
 
       /// Here we are checking if the player is hit by PickUp/powerBooster
     } else if (other is PickUp) {
+      game.audioManager.playSound("collect");
       /// if yes then we are removing our PickUp from our game
       other.removeFromParent();
 

@@ -24,6 +24,8 @@ class Explosion extends PositionComponent with HasGameReference<MyGame> {
 
   @override
   FutureOr<void> onLoad() {
+    final int _num = 1+_random.nextInt(2);
+    game.audioManager.playSound("explode$_num");
     /// Here we are calling the _createFlash method
     _createFlash();
     _createParticles();
