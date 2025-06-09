@@ -97,6 +97,7 @@ class _TitleOverlayState extends State<TitleOverlay> {
             GestureDetector(
               onTap: () {
                 widget.game.audioManager.playSound("start");
+
                 /// Here we are starting the game
                 widget.game.startGame();
 
@@ -108,6 +109,49 @@ class _TitleOverlayState extends State<TitleOverlay> {
               child: SizedBox(
                 width: 200,
                 child: Image.asset("assets/images/start_button.png"),
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                        setState(() {
+                          widget.game.audioManager.toggleMusic();
+                        });
+                        },
+                        icon:
+                            widget.game.audioManager.musicEnabled
+                                ? Icon(Icons.music_note)
+                                : Icon(Icons.music_off),
+                        color:
+                            widget.game.audioManager.musicEnabled
+                                ? Colors.white
+                                : Colors.grey,
+                      ),
+                      IconButton(
+                        onPressed: () {
+                        setState(() {
+                          widget.game.audioManager.toggleSound();
+                        });
+                        },
+                        icon:
+                            widget.game.audioManager.soundEnabled
+                                ? Icon(Icons.volume_up)
+                                : Icon(Icons.volume_off),
+                        color:
+                            widget.game.audioManager.soundEnabled
+                                ? Colors.white
+                                : Colors.grey,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],
