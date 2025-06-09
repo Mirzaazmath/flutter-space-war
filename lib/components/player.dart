@@ -45,8 +45,12 @@ class Player extends SpriteAnimationComponent
 
   /// Created a variable to handle the  laser powerBooster time duration
   late Timer _laserPowerBoosterTimer;
+
   /// Created a variable to handle the Shield powerBooster
   Shield? activeShield;
+
+  /// Created a variable to handle player color
+  late String _color;
 
   /// Here we have created constructor of player to initialize the _explosionTimer
   Player() {
@@ -71,6 +75,9 @@ class Player extends SpriteAnimationComponent
 
   @override
   FutureOr<void> onLoad() async {
+    /// Here we are getting the selected color option
+    _color = game.playerColors[game.playerColorIndex];
+
     /// Here we are setting the player in sprite with the help of
     /// loadSprite method and passing the assets name
     /// it will automatically search it from assets/ images folder
@@ -116,8 +123,9 @@ class Player extends SpriteAnimationComponent
       _explosionTimer.update(dt);
       return;
     }
+
     /// Here we are checking whether our player is hit by laser power pickup or not
-    if(_laserPowerBoosterTimer.isRunning()){
+    if (_laserPowerBoosterTimer.isRunning()) {
       /// if the player is in _laserPowerBoosterTimer .isRunning() state at that time only we are updating our _laserPowerBoosterTimer
       _laserPowerBoosterTimer.update(dt);
     }
@@ -228,10 +236,11 @@ class Player extends SpriteAnimationComponent
   Future<SpriteAnimation> _loadAnimation() async {
     /// Here we are returning the SpriteAnimation with spriteList
     /// this will switch between to Sprite images so it will look
+    /// Here we have specified the color of the player
     return SpriteAnimation.spriteList(
       [
-        await game.loadSprite("player_blue_on0.png"),
-        await game.loadSprite("player_blue_on1.png"),
+        await game.loadSprite("player_${_color}_on0.png"),
+        await game.loadSprite("player_${_color}_on1.png"),
       ],
       stepTime: 0.1,
       loop: true,
@@ -241,8 +250,9 @@ class Player extends SpriteAnimationComponent
   /// Here we have created a _handleDestruction method to destroy our player when it hit to any asteroid
   void _handleDestruction() async {
     /// Here we are adding the new SpriteAnimation for our player destruction
+    /// Here we have specified the color of the player
     animation = SpriteAnimation.spriteList([
-      await game.loadSprite("player_blue_off.png"),
+      await game.loadSprite("player_${_color}_off.png"),
     ], stepTime: double.infinity);
 
     /// Here we are adding the ColorEffect to our player destruction
@@ -267,7 +277,7 @@ class Player extends SpriteAnimationComponent
     add(MoveEffect.by(Vector2(0, 200), EffectController(duration: 3.0)));
 
     /// Here we are adding the RemoveEffect to completely dispose the player once it destroyed
-    add(RemoveEffect(delay: 4.0,onComplete: game.playerDied));
+    add(RemoveEffect(delay: 4.0, onComplete: game.playerDied));
 
     /// Here we are updating the _isDestroyed value
     _isDestroyed = true;
@@ -306,7 +316,7 @@ class Player extends SpriteAnimationComponent
           game.add(Bomb(position: position.clone()));
           break;
         case PickupType.shield:
-          if(activeShield!=null){
+          if (activeShield != null) {
             remove(activeShield!);
           }
           activeShield = Shield();

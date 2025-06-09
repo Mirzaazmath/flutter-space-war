@@ -23,6 +23,8 @@ class _TitleOverlayState extends State<TitleOverlay> {
 
   @override
   Widget build(BuildContext context) {
+    /// Here we are getting the player color from my game
+    String playerColor= widget.game.playerColors[widget.game.playerColorIndex];
     return AnimatedOpacity(
       onEnd: (){
         /// Here we are checking the _opacity value if it return to 0
@@ -45,7 +47,12 @@ class _TitleOverlayState extends State<TitleOverlay> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () { setState(() {
+                    widget.game.playerColorIndex--;
+                    if(widget.game.playerColorIndex<=0){
+                      widget.game.playerColorIndex=widget.game.playerColors.length-1;
+                    }
+                  });},
                   child: Transform.flip(
                     flipX: true,
                     child: SizedBox(
@@ -58,11 +65,18 @@ class _TitleOverlayState extends State<TitleOverlay> {
                   padding: EdgeInsets.symmetric(horizontal: 30),
                   child: SizedBox(
                     width: 100,
-                    child: Image.asset("assets/images/player_blue_off.png"),
+                    child: Image.asset("assets/images/player_${playerColor}_off.png"),
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    setState(() {
+                      widget.game.playerColorIndex++;
+                      if(widget.game.playerColorIndex==widget.game.playerColors.length){
+                        widget.game.playerColorIndex=0;
+                      }
+                    });
+                  },
                   child: SizedBox(
                     width: 30,
                     child: Image.asset("assets/images/arrow_button.png"),
