@@ -135,7 +135,7 @@ class Player extends SpriteAnimationComponent
     /// "currentPosition +=newPositionFromJoyStick*speed"
     /// Here we have added the key arrow movement from keyboard in our game
     final Vector2 movement = game.joystick.relativeDelta + _keyBoardMovement;
-    position += movement.normalized() * 200 * dt;
+    position += movement.normalized() * 350 * dt;
 
     /// Here we are handling the screen bound
     _handleScreenBounds();
