@@ -40,7 +40,21 @@ class _TitleOverlayState extends State<TitleOverlay> {
         alignment: Alignment.center,
         child: Column(
           children: [
-            const SizedBox(height: 60),
+             SizedBox(height: 70,
+            child: Align(
+
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: OutlinedButton(onPressed: (){
+                 widget.game.overlays.add("PlayInstructions");
+                 /// Here we are setting the _opacity back to 0
+                 setState(() {
+                   _opacity = 0.0;
+                 });
+                }, child: Text("How to Play?",style: TextStyle(color: Colors.white),)),
+              ),
+            ),),
             SizedBox(width: 270, child: Image.asset("assets/images/title.png")),
             const SizedBox(height: 20),
             Row(
