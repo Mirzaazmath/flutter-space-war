@@ -219,16 +219,25 @@ class Player extends SpriteAnimationComponent
     /// Here we are are changing horizontal movement of our player by arrowLeft and arrowRight key of physical keyboard
     _keyBoardMovement.x = 0;
     _keyBoardMovement.x +=
-        keysPressed.contains(LogicalKeyboardKey.arrowLeft) ? -1 : 0;
+        (keysPressed.contains(LogicalKeyboardKey.arrowLeft)||keysPressed.contains(LogicalKeyboardKey.keyA)) ? -1 : 0;
     _keyBoardMovement.x +=
-        keysPressed.contains(LogicalKeyboardKey.arrowRight) ? 1 : 0;
+        (keysPressed.contains(LogicalKeyboardKey.arrowRight)||keysPressed.contains(LogicalKeyboardKey.keyD)) ? 1 : 0;
 
     /// Here we are are changing vertical  movement of our player by arrowUp and arrowUp key of physical keyboard
     _keyBoardMovement.y = 0;
     _keyBoardMovement.y +=
-        keysPressed.contains(LogicalKeyboardKey.arrowUp) ? -1 : 0;
+        (keysPressed.contains(LogicalKeyboardKey.arrowUp)||keysPressed.contains(LogicalKeyboardKey.keyW)) ? -1 : 0;
     _keyBoardMovement.y +=
-        keysPressed.contains(LogicalKeyboardKey.arrowDown) ? 1 : 0;
+        (keysPressed.contains(LogicalKeyboardKey.arrowDown)||keysPressed.contains(LogicalKeyboardKey.keyZ)) ? 1 : 0;
+    // --- Laser Firing with 'L' key ---
+    // Check if the 'L' key was pressed down and if the cool-down period has passed.
+    if (event is KeyDownEvent && keysPressed.contains(LogicalKeyboardKey.keyL) || keysPressed.contains(LogicalKeyboardKey.keyQ)) {
+      // Ensure the laser fires only if the cooldown has elapsed.
+      if (_elaspedFireTime >= _fireCoolDown) {
+        _fireLaser();
+        _elaspedFireTime = 0.0; // Reset cooldown timer after firing.
+      }
+    }
 
     return true;
   }

@@ -58,8 +58,10 @@ class MyGame extends FlameGame
     /// Here we are setting our device in full screenMode
     await Flame.device.fullScreen();
 
-    /// Here we are setting our device in  portraitMode
-    await Flame.device.setPortrait();
+    // /// Here we are setting our device in  portraitMode
+    // await Flame.device.setPortrait();
+    /// Here we are setting our device in  Landscape
+    await Flame.device.setLandscape();
 
     /// Here we are initializing the _audioManager
     audioManager = AudioManager();
